@@ -1,7 +1,7 @@
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { Post } from './components/Post';
-import { posts } from './mocks/Posts';
+import { posts } from './mocks/posts';
 
 import styles from './App.module.css';
 
