@@ -1,3 +1,6 @@
+import { format, formatDistanceToNow } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
+
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
@@ -6,75 +9,51 @@ import styles from './Post.module.css';
 // publishedAt: Date
 // content: String
 
-const posts = [
-  {
-    id: 1,
-    author: {
-      avatarUrl: 'https://github.com/wsasouza.png',
-      name: 'Walter Santos de Andrade Souza',
-      role: 'Fullstack Developer',
-    },
-    content: [
-      { type: 'paragraph', content: 'Fala galeraa 👋' },
-      {
-        type: 'paragraph',
-        content:
-          'Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀',
-      },
-      { type: 'link', content: '👉 jane.design/doctorcare' },
-    ],
-    publishedAt: new Date('2022-06-06 20:13:42'),
-  },
-  {
-    id: 2,
-    author: {
-      avatarUrl: 'https://github.com/diego3g.png',
-      name: 'Walter Santos de Andrade Souza',
-      role: 'CTO Rocketseat',
-    },
-    content: [
-      { type: 'paragraph', content: 'Fala galeraa 👋' },
-      {
-        type: 'paragraph',
-        content: 'Acabei de atualizar a trilha ReactJS do Ignite 🚀',
-      },
-      { type: 'link', content: '👉 app.rocketseat/ignite' },
-    ],
-    publishedAt: new Date('2022-06-03 14:15:22'),
-  },
-];
+export function Post({ author, publishedAt, content }) {
+  const publishedDateFormatted = format(
+    publishedAt,
+    "d 'de' LLLL 'às' HH:mm'h'",
+    { locale: ptBR }
+  );
 
-export function Post() {
+  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+    locale: ptBR,
+    addSuffix: true,
+  });
+
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar src="https://github.com/wsasouza.png" alt="foto do usuário" />
+          <Avatar src={author.avatarUrl} alt={author.name} />
           <div className={styles.authorInfo}>
-            <strong>Walter Souza</strong>
-            <span>Full Stack Developer</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
 
-        <time title="03 de junho às 17:00" dateTime="2022-06-03 17:00:00">
-          Publicado há 1h
+        <time
+          title={publishedDateFormatted}
+          dateTime={publishedAt.toISOString()}
+        >
+          {publishedDateRelativeToNow}
         </time>
       </header>
 
       <div className={styles.content}>
-        <p>Fala galeraa 👋</p>
-        <p>
-          Acabei de subir mais um projeto no meu portifa. É um projeto que fiz
-          no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀
-        </p>
-        <p>
-          👉 <a href="#">jane.design/doctorcare</a>
-        </p>
-        <p>
-          <a href="#">#novoprojeto</a> <a href="#">#nlw</a>{' '}
-          <a href="#">#rocketseat</a>
-        </p>
+        {content.map((line) => {
+          if (line.type === 'paragraph') {
+            return <p>{line.content}</p>;
+          } else if (line.type === 'link') {
+            return (
+              <p>
+                <a href="#">{line.content}</a>
+              </p>
+            );
+          }
+        })}
       </div>
+
       <form className={styles.commentForm}>
         <strong>Deixe o seu feedback</strong>
 
