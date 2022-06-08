@@ -4,6 +4,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
+
 import styles from './Post.module.css';
 
 //author: {avatar_url:"", name:"", role:""}
